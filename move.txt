@@ -1,0 +1,52 @@
+// state body components
+    private Transform body;
+    private Rigidbody2D rb;
+
+    // state movement variables
+    private bool w = false;
+    private bool a = false;
+    private bool s = false;
+    private bool d = false;
+    private bool shift = false;
+    private Vector2 direction;
+    private Vector2 move;
+    private float walkSpeed = 1f;
+    private float runSpeed = 2f;
+    private float speed;
+
+    void Start()
+    {
+        // get body components
+        body = transform.Find("Body");
+        rb = this.GetComponent<Rigidbody2D>();
+
+    }
+
+    void Update()
+    {
+        // get movement inputs
+        if (Input.GetKey(KeyCode.W)) {w = true;} else {w = false;}
+
+        if (Input.GetKey(KeyCode.A)) {a = true;} else {a = false;}
+
+        if (Input.GetKey(KeyCode.S)) {s = true;} else {s = false;}
+
+        if (Input.GetKey(KeyCode.D)) {d = true;} else {d = false;}
+
+        if (Input.GetKey(KeyCode.LeftShift)) { shift = true; } else { shift = false; }
+    }
+
+    private void FixedUpdate()
+    {
+        // basic movements
+        direction = new Vector2(0f, 0f);
+        if (w) {direction += new Vector2(0f, 1f);}
+        if (a) {direction += new Vector2(-1f, 0f);}
+        if (s) {direction += new Vector2(0f, -1f);}
+        if (d) {direction += new Vector2(1f, 0f);}
+        if (shift) {speed = runSpeed;} else {speed = walkSpeed;}
+        move = direction.normalized*speed;
+
+        // flytta karaktären
+        rb.MovePosition(rb.position + move * Time.fixedDeltaTime);
+    }
